@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6 Months of Us 🌙</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --bg: #07071a;
+  --bg2: #0e0e28;
+  --bg3: #141432;
+  --rose: #e8557a;
+  --rose-l: #f5a0b8;
+  --rose-dim: rgba(232,85,122,0.12);
+  --gold: #f0c060;
+  --gold-dim: rgba(240,192,96,0.10);
+  --lavender: #a78bfa;
+  --teal: #5eead4;
+  --text: #f0eef8;
+  --text-d: rgba(240,238,248,0.50);
+  --text-dd: rgba(240,238,248,0.25);
+  --border: rgba(240,238,248,0.07);
+  --border2: rgba(240,238,248,0.13);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;line-height:1.6;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;width:100%;z-index:100;padding:1rem 2rem;display:flex;justify-content:center;gap:2rem;background:linear-gradient(to bottom,rgba(7,7,26,0.95),transparent);}
+nav a{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text-d);text-decoration:none;transition:color .3s;}
+nav a:hover{color:var(--rose-l);}
+
+/* STARS */
+canvas#starfield{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+
+section{position:relative;z-index:1;}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6rem 2rem 4rem;}
+.hero-eyebrow{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--rose-l);margin-bottom:1.5rem;opacity:.8;}
+#hero h1{font-family:'Playfair Display',serif;font-size:clamp(3.5rem,12vw,8rem);line-height:1.05;margin-bottom:1.2rem;background:linear-gradient(135deg,#f0c060 0%,#e8557a 45%,#a78bfa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-quote{font-family:'Playfair Display',serif;font-size:clamp(1rem,2.5vw,1.35rem);color:var(--text-d);margin-bottom:3rem;font-style:italic;max-width:560px;}
+.counters{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:3rem;}
+.c-box{background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:18px;padding:1.5rem 1.8rem;min-width:120px;text-align:center;backdrop-filter:blur(10px);}
+.c-num{font-family:'Playfair Display',serif;font-size:2.6rem;line-height:1;display:block;color:var(--gold);}
+.c-lbl{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-d);margin-top:.4rem;display:block;}
+.scroll-down{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dd);animation:bob 2s ease-in-out infinite;cursor:pointer;}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+
+/* SECTION SHELL */
+.sec{max-width:1000px;margin:0 auto;padding:7rem 2rem;}
+.sec-pill{display:inline-block;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rose);background:var(--rose-dim);border:1px solid rgba(232,85,122,0.2);border-radius:20px;padding:.3rem .9rem;margin-bottom:1.2rem;}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);line-height:1.15;margin-bottom:.6rem;}
+.sec-sub{color:var(--text-d);font-size:.95rem;max-width:580px;margin-bottom:3rem;line-height:1.7;}
+
+/* DIVIDER */
+.hr{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:0;}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:2.5rem;}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,var(--rose) 20%,var(--lavender) 80%,transparent);}
+.tl{position:relative;margin-bottom:2.8rem;opacity:0;transform:translateX(-24px);transition:opacity .6s ease,transform .6s ease;}
+.tl.show{opacity:1;transform:translateX(0);}
+.tl::before{content:'';position:absolute;left:-2.9rem;top:.4rem;width:10px;height:10px;border-radius:50%;background:var(--rose);border:2px solid var(--bg);box-shadow:0 0 12px rgba(232,85,122,.5);}
+.tl.gold::before{background:var(--gold);box-shadow:0 0 12px rgba(240,192,96,.5);}
+.tl.lav::before{background:var(--lavender);box-shadow:0 0 12px rgba(167,139,250,.5);}
+.tl-year{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--rose-l);margin-bottom:.25rem;}
+.tl-title{font-family:'Playfair Display',serif;font-size:1.25rem;margin-bottom:.3rem;}
+.tl-body{color:var(--text-d);font-size:.9rem;line-height:1.7;}
+.tl-badge{display:inline-block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border-radius:12px;padding:.2rem .7rem;margin-top:.5rem;}
+.badge-rose{background:var(--rose-dim);color:var(--rose-l);border:1px solid rgba(232,85,122,.2);}
+.badge-gold{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(240,192,96,.2);}
+.badge-lav{background:rgba(167,139,250,.1);color:var(--lavender);border:1px solid rgba(167,139,250,.2);}
+
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.2rem;margin-bottom:3rem;}
+.stat-card{background:rgba(255,255,255,0.03);border:1px solid var(--border2);border-radius:16px;padding:1.4rem 1.5rem;transition:border-color .3s,transform .3s;}
+.stat-card:hover{border-color:rgba(232,85,122,.3);transform:translateY(-3px);}
+.stat-card .sn{font-family:'Playfair Display',serif;font-size:2.4rem;display:block;line-height:1;margin-bottom:.4rem;}
+.stat-card .sl{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-d);}
+.stat-card .se{font-size:.8rem;color:var(--text-dd);margin-top:.3rem;}
+
+/* CHARTS */
+.chart-wrap{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:20px;padding:1.8rem;margin-bottom:2rem;}
+.chart-wrap h3{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:.3rem;}
+.chart-wrap p{font-size:.85rem;color:var(--text-d);margin-bottom:1.5rem;}
+
+/* DUEL LAYOUT */
+.duel{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;}
+@media(max-width:600px){.duel{grid-template-columns:1fr;}}
+.duel-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:18px;padding:1.6rem;}
+.duel-card.y-card{border-color:rgba(94,234,212,.15);}
+.duel-card.n-card{border-color:rgba(232,85,122,.15);}
+.dc-name{font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:1rem;}
+.dc-name.yn{color:var(--teal);}
+.dc-name.nn{color:var(--rose-l);}
+
+/* BARS */
+.bar-row{display:flex;align-items:center;gap:.8rem;margin-bottom:.7rem;}
+.bar-label{font-size:.8rem;color:var(--text-d);min-width:90px;text-align:right;}
+.bar-track{flex:1;height:6px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:3px;transition:width 1s ease;}
+.bar-count{font-size:.75rem;color:var(--text-dd);min-width:28px;}
+
+/* EMOJI ROW */
+.emoji-row{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem;}
+.emoji-chip{display:flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:24px;padding:.3rem .8rem;font-size:.85rem;}
+.emoji-chip span{color:var(--text-d);font-size:.75rem;}
+
+/* WORD CLOUD */
+.words{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.5rem;}
+.word-chip{border-radius:8px;padding:.3rem .75rem;font-size:.85rem;transition:transform .2s;}
+.word-chip:hover{transform:scale(1.05);}
+
+/* LOVE METER */
+.love-meter{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:20px;padding:2rem;margin-bottom:2rem;}
+.lm-row{margin-bottom:1.5rem;}
+.lm-label{display:flex;justify-content:space-between;font-size:.85rem;color:var(--text-d);margin-bottom:.5rem;}
+.lm-track{height:10px;background:rgba(255,255,255,.07);border-radius:5px;position:relative;overflow:hidden;}
+.lm-y{position:absolute;left:0;top:0;height:100%;border-radius:5px 0 0 5px;transition:width 1.2s ease;}
+.lm-n{position:absolute;right:0;top:0;height:100%;border-radius:0 5px 5px 0;transition:width 1.2s ease;}
+.lm-mid{position:absolute;left:50%;top:-3px;width:2px;height:16px;background:rgba(255,255,255,.15);}
+.lm-verdict{text-align:center;font-family:'Playfair Display',serif;font-size:1rem;color:var(--text-d);margin-top:.5rem;font-style:italic;}
+
+/* NIGHT CHART */
+.polar-wrap{display:flex;justify-content:center;}
+
+/* DESERT */
+.desert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:.7rem;margin-bottom:2rem;}
+.desert-box{border-radius:10px;padding:.8rem;text-align:center;border:1px solid var(--border);}
+.desert-year{font-size:.75rem;letter-spacing:1px;text-transform:uppercase;color:var(--text-d);}
+.desert-num{font-family:'Playfair Display',serif;font-size:1.4rem;display:block;margin-top:.2rem;}
+
+/* ENDING */
+#ending{min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:4rem 2rem;}
+.ending-inner{max-width:640px;}
+.ending-inner h2{font-family:'Playfair Display',serif;font-size:clamp(2rem,6vw,3.5rem);margin-bottom:1.5rem;line-height:1.2;}
+.ending-inner p{color:var(--text-d);font-size:1rem;line-height:1.8;margin-bottom:1rem;}
+.ending-hearts{font-size:2rem;letter-spacing:.5rem;margin-bottom:2rem;}
+
+/* FADE IN */
+.fade{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease;}
+.fade.show{opacity:1;transform:translateY(0);}
+
+/* responsive */
+@media(max-width:600px){
+  nav{gap:1rem;}
+  .duel{grid-template-columns:1fr;}
+  .stat-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+
+<nav>
+  <a href="#hero">Home</a>
+  <a href="#story">Story</a>
+  <a href="#numbers">Numbers</a>
+  <a href="#love">Love</a>
+  <a href="#vibes">Vibes</a>
+  <a href="#ending">Us</a>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section id="hero">
+  <p class="hero-eyebrow">Yashraj ✦ Noor — 8th November 2025</p>
+  <h1>6 Months<br><em>of Us</em></h1>
+  <p class="hero-quote">"You knew me since college. I just had to wait long enough for the world to catch up."</p>
+  <div class="counters">
+    <div class="c-box"><span class="c-num" id="cnt-days">182</span><span class="c-lbl">Days Together</span></div>
+    <div class="c-box"><span class="c-num">31,984</span><span class="c-lbl">Messages Sent</span></div>
+    <div class="c-box"><span class="c-num">280</span><span class="c-lbl">Days Talked</span></div>
+    <div class="c-box"><span class="c-num">0</span><span class="c-lbl">Days Apart</span></div>
+  </div>
+  <span class="scroll-down" onclick="document.getElementById('story').scrollIntoView({behavior:'smooth'})">↓ scroll to explore ↓</span>
+</section>
+
+<div class="hr"></div>
+
+<!-- ═══════════ STORY / TIMELINE ═══════════ -->
+<section id="story">
+  <div class="sec">
+    <span class="sec-pill">The Journey</span>
+    <h2 class="sec-title fade">A story 8 years in the making</h2>
+    <p class="sec-sub fade">From a college classroom in 2017 to late-night calls across continents — this is how it happened.</p>
+    <div class="timeline">
+      <div class="tl">
+        <div class="tl-year">2017</div>
+        <div class="tl-title">College. Shimla. A quiet feeling.</div>
+        <div class="tl-body">Yashraj met Noor in college. She didn't know yet. He did. Some feelings are too big to say out loud — so they stayed quiet, tucked away, waiting.</div>
+        <span class="tl-badge badge-lav">First chapter</span>
+      </div>
+      <div class="tl">
+        <div class="tl-year">2020 – 2024</div>
+        <div class="tl-title">The desert years.</div>
+        <div class="tl-body">Life separated them. Yashraj came to France. Noor stayed in Shimla. The whole of 2024 passed with just <strong style="color:var(--gold)">22 messages</strong> between them. Twenty-two. And yet — here you both are.</div>
+        <span class="tl-badge badge-rose">22 msgs in all of 2024</span>
+      </div>
+      <div class="tl gold">
+        <div class="tl-year">August 2025</div>
+        <div class="tl-title">The confession that changed everything.</div>
+        <div class="tl-body">Yashraj finally said it. The walls came down. August went from silence to <strong style="color:var(--gold)">3,355 messages</strong> in a single month. Seven-to-eight hour calls every day. Time zones be damned.</div>
+        <span class="tl-badge badge-gold">3,355 messages in month one</span>
+      </div>
+      <div class="tl">
+        <div class="tl-year">September 19, 2025</div>
+        <div class="tl-title">"Will you be my girl?"</div>
+        <div class="tl-body">At 12:57am, Yashraj asked the question. The chat went nuclear — 5,127 messages that month alone. Their peak. Their beautiful, ridiculous, endless peak.</div>
+        <span class="tl-badge badge-rose">The first ask</span>
+      </div>
+      <div class="tl gold">
+        <div class="tl-year">November 8, 2025</div>
+        <div class="tl-title">Official. Real. Yours.</div>
+        <div class="tl-body">The proposal. The day it became something the whole universe could see. Yashraj and Noor — officially, properly, completely — together. Shimla to France, 6,645 km apart, closer than ever.</div>
+        <span class="tl-badge badge-gold">❤ Day 1</span>
+      </div>
+      <div class="tl lav">
+        <div class="tl-year">May 8, 2026</div>
+        <div class="tl-title">Six months. Not one silent day.</div>
+        <div class="tl-body">In 280 days since August 2025, there has been exactly <strong style="color:var(--lavender)">1 day</strong> with no messages — and that was Aug 1st, before everything began. Since the confession? Zero. Not one day without each other.</div>
+        <span class="tl-badge badge-lav">Today ✦ 6 month anniversary</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- ═══════════ NUMBERS ═══════════ -->
+<section id="numbers">
+  <div class="sec">
+    <span class="sec-pill">By the Numbers</span>
+    <h2 class="sec-title fade">The stats don't lie</h2>
+    <p class="sec-sub fade">Every message, every midnight call, every "good morning" — counted and kept forever.</p>
+
+    <div class="stat-grid fade">
+      <div class="stat-card"><span class="sn" style="color:var(--gold)">31,984</span><span class="sl">Total Messages</span><span class="se">since August 2025</span></div>
+      <div class="stat-card"><span class="sn" style="color:var(--rose-l)">6,001</span><span class="sl">Peak Month</span><span class="se">October 2025 🔥</span></div>
+      <div class="stat-card"><span class="sn" style="color:var(--lavender)">280</span><span class="sl">Days Talked</span><span class="se">out of 280 possible</span></div>
+      <div class="stat-card"><span class="sn" style="color:var(--teal)">114</span><span class="sl">Msgs / Day</span><span class="se">average</span></div>
+      <div class="stat-card"><span class="sn" style="color:var(--gold)">179</span><span class="sl">Days Noor Texted First</span><span class="se">she can't wait either</span></div>
+      <div class="stat-card"><span class="sn" style="color:var(--rose-l)">17,221</span><span class="sl">Noor's Messages</span><span class="se">she talks slightly more 😏</span></div>
+    </div>
+
+    <!-- MONTHLY CHART -->
+    <div class="chart-wrap fade">
+      <h3>Monthly Message Explosion</h3>
+      <p>From 22 messages in all of 2024 to 6,001 in a single month. The chat volcano erupted.</p>
+      <div style="position:relative;height:320px;">
+        <canvas id="monthChart" role="img" aria-label="Monthly message counts from 2020 to 2026 showing explosion after August 2025">Monthly messages by year.</canvas>
+      </div>
+    </div>
+
+    <!-- NIGHTLY CHART -->
+    <div class="chart-wrap fade">
+      <h3>When Do You Actually Talk?</h3>
+      <p>Spoiler: you're both night creatures. Peak conversation hits at <strong style="color:var(--rose-l)">7pm and midnight</strong>. The 2am slowdown is just pausing to breathe.</p>
+      <div id="legend-hourly" style="display:flex;gap:1.5rem;font-size:12px;color:var(--text-d);margin-bottom:1rem;">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:10px;height:10px;border-radius:2px;background:#5eead4;display:inline-block;"></span>Yashraj</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:10px;height:10px;border-radius:2px;background:#e8557a;display:inline-block;"></span>Noor</span>
+      </div>
+      <div style="position:relative;height:280px;">
+        <canvas id="hourChart" role="img" aria-label="Hourly message distribution for both Yashraj and Noor">Hourly activity chart.</canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- ═══════════ LOVE ═══════════ -->
+<section id="love">
+  <div class="sec">
+    <span class="sec-pill">Love Data</span>
+    <h2 class="sec-title fade">Who loves who more?</h2>
+    <p class="sec-sub fade">The argument settled with receipts. Every "love you", every sorry, every good morning — logged.</p>
+
+    <div class="love-meter fade">
+      <div class="lm-row">
+        <div class="lm-label"><span style="color:var(--teal)">Yashraj — 37x</span><span style="color:var(--rose-l)">Noor — 12x</span></div>
+        <div class="lm-track" style="height:12px;">
+          <div class="lm-y" id="lm-love-y" style="width:0%;background:linear-gradient(90deg,#5eead4,#3dd6c0);"></div>
+          <div class="lm-n" id="lm-love-n" style="width:0%;background:linear-gradient(90deg,#e8557a,#f5a0b8);"></div>
+          <div class="lm-mid"></div>
+        </div>
+        <div class="lm-verdict">Yashraj says "love you" <em>3× more</em> — he wins this round 🏆</div>
+      </div>
+
+      <div class="lm-row">
+        <div class="lm-label"><span style="color:var(--teal)">Yashraj — 19 sorries</span><span style="color:var(--rose-l)">Noor — 28 sorries</span></div>
+        <div class="lm-track" style="height:12px;">
+          <div class="lm-y" id="lm-sorry-y" style="width:0%;background:linear-gradient(90deg,#5eead4,#3dd6c0);"></div>
+          <div class="lm-n" id="lm-sorry-n" style="width:0%;background:linear-gradient(90deg,#e8557a,#f5a0b8);"></div>
+          <div class="lm-mid"></div>
+        </div>
+        <div class="lm-verdict">Noor says sorry more — she's more accountable 👑</div>
+      </div>
+
+      <div class="lm-row">
+        <div class="lm-label"><span style="color:var(--teal)">Yashraj — 101 days first</span><span style="color:var(--rose-l)">Noor — 179 days first</span></div>
+        <div class="lm-track" style="height:12px;">
+          <div class="lm-y" id="lm-first-y" style="width:0%;background:linear-gradient(90deg,#5eead4,#3dd6c0);"></div>
+          <div class="lm-n" id="lm-first-n" style="width:0%;background:linear-gradient(90deg,#e8557a,#f5a0b8);"></div>
+          <div class="lm-mid"></div>
+        </div>
+        <div class="lm-verdict">Noor opens the conversation first on <em>64% of days</em> — she can't wait either 🥹</div>
+      </div>
+    </div>
+
+    <!-- AFFECTION RADAR -->
+    <div class="chart-wrap fade">
+      <h3>How You Each Show Affection</h3>
+      <p>Different love languages, same destination.</p>
+      <div id="legend-aff" style="display:flex;gap:1.5rem;font-size:12px;color:var(--text-d);margin-bottom:1rem;">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:10px;height:10px;border-radius:2px;background:#5eead4;display:inline-block;"></span>Yashraj</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:10px;height:10px;border-radius:2px;background:#e8557a;display:inline-block;"></span>Noor</span>
+      </div>
+      <div style="position:relative;height:340px;max-width:420px;margin:0 auto;">
+        <canvas id="affChart" role="img" aria-label="Radar chart comparing affection styles of Yashraj and Noor">Affection radar chart.</canvas>
+      </div>
+    </div>
+
+    <!-- SPICY CHART -->
+    <div class="chart-wrap fade">
+      <h3>🔥 The Spicy Months</h3>
+      <p>Late-night messages (11pm–3am) and affectionate intensity by month. October and September 2025 were… something.</p>
+      <div id="legend-spicy" style="display:flex;gap:1.5rem;font-size:12px;color:var(--text-d);margin-bottom:1rem;">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:10px;height:10px;border-radius:2px;background:#f0c060;display:inline-block;"></span>Late Night Msgs</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:10px;height:10px;border-radius:2px;background:#e8557a;display:inline-block;"></span>Spicy Intensity</span>
+      </div>
+      <div style="position:relative;height:280px;">
+        <canvas id="spicyChart" role="img" aria-label="Late night and spicy message counts by month">Spicy intensity chart.</canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- ═══════════ VIBES ═══════════ -->
+<section id="vibes">
+  <div class="sec">
+    <span class="sec-pill">Personalities</span>
+    <h2 class="sec-title fade">Your linguistic fingerprints</h2>
+    <p class="sec-sub fade">The words you reach for without thinking. The emojis that are just <em>you</em>. And yes — the anger mode.</p>
+
+    <!-- SIGNATURE WORDS -->
+    <div class="duel fade">
+      <div class="duel-card y-card">
+        <div class="dc-name yn">✦ Yashraj's Signature</div>
+        <p style="font-size:.82rem;color:var(--text-d);margin-bottom:1rem;">These words are disproportionately <em>you</em></p>
+        <div class="words">
+          <span class="word-chip" style="background:rgba(94,234,212,.1);color:#5eead4;border:1px solid rgba(94,234,212,.2);font-size:.95rem;font-weight:500;">yrr</span>
+          <span class="word-chip" style="background:rgba(94,234,212,.08);color:#a8f5ec;border:1px solid rgba(94,234,212,.15);">haa</span>
+          <span class="word-chip" style="background:rgba(94,234,212,.08);color:#a8f5ec;border:1px solid rgba(94,234,212,.15);">mae</span>
+          <span class="word-chip" style="background:rgba(94,234,212,.08);color:#a8f5ec;border:1px solid rgba(94,234,212,.15);">kyu</span>
+          <span class="word-chip" style="background:rgba(240,192,96,.08);color:var(--gold);border:1px solid rgba(240,192,96,.15);">call</span>
+          <span class="word-chip" style="background:rgba(240,192,96,.08);color:var(--gold);border:1px solid rgba(240,192,96,.15);">yaha</span>
+          <span class="word-chip" style="background:rgba(94,234,212,.06);color:var(--text-d);border:1px solid var(--border);">rhe</span>
+          <span class="word-chip" style="background:rgba(94,234,212,.06);color:var(--text-d);border:1px solid var(--border);">chal</span>
+          <span class="word-chip" style="background:rgba(94,234,212,.06);color:var(--text-d);border:1px solid var(--border);">tune</span>
+        </div>
+        <p style="font-size:.75rem;color:var(--text-dd);margin-top:1rem;">You say <em style="color:var(--teal)">"yrr"</em> 274 times. It's your punctuation mark for life.</p>
+      </div>
+      <div class="duel-card n-card">
+        <div class="dc-name nn">✦ Noor's Signature</div>
+        <p style="font-size:.82rem;color:var(--text-d);margin-bottom:1rem;">These words are unmistakably <em>her</em></p>
+        <div class="words">
+          <span class="word-chip" style="background:rgba(232,85,122,.1);color:var(--rose-l);border:1px solid rgba(232,85,122,.2);font-size:.95rem;font-weight:500;">hmmm</span>
+          <span class="word-chip" style="background:rgba(232,85,122,.08);color:#f5b8c8;border:1px solid rgba(232,85,122,.15);">pta</span>
+          <span class="word-chip" style="background:rgba(232,85,122,.08);color:#f5b8c8;border:1px solid rgba(232,85,122,.15);">ese</span>
+          <span class="word-chip" style="background:rgba(232,85,122,.08);color:#f5b8c8;border:1px solid rgba(232,85,122,.15);">bhot</span>
+          <span class="word-chip" style="background:rgba(167,139,250,.08);color:var(--lavender);border:1px solid rgba(167,139,250,.15);">bus</span>
+          <span class="word-chip" style="background:rgba(167,139,250,.08);color:var(--lavender);border:1px solid rgba(167,139,250,.15);">bol</span>
+          <span class="word-chip" style="background:rgba(167,139,250,.08);color:var(--lavender);border:1px solid rgba(167,139,250,.15);">fon</span>
+          <span class="word-chip" style="background:rgba(232,85,122,.06);color:var(--text-d);border:1px solid var(--border);">acha</span>
+          <span class="word-chip" style="background:rgba(232,85,122,.06);color:var(--text-d);border:1px solid var(--border);">hogi</span>
+        </div>
+        <p style="font-size:.75rem;color:var(--text-dd);margin-top:1rem;">Her <em style="color:var(--rose-l)">"hmmm"</em> appears 277 times. It contains multitudes — curiosity, scepticism, and "I hear you but..."</p>
+      </div>
+    </div>
+
+    <!-- EMOJIS -->
+    <div class="duel fade">
+      <div class="duel-card y-card">
+        <div class="dc-name yn">Yashraj's Emoji DNA</div>
+        <div class="emoji-row">
+          <div class="emoji-chip">😂 <span>789×</span></div>
+          <div class="emoji-chip">😘 <span>256×</span></div>
+          <div class="emoji-chip">🤣 <span>183×</span></div>
+          <div class="emoji-chip">😏 <span>155×</span></div>
+          <div class="emoji-chip">❤ <span>113×</span></div>
+          <div class="emoji-chip">😌 <span>97×</span></div>
+        </div>
+        <p style="font-size:.78rem;color:var(--text-dd);margin-top:1rem;">You laugh (789) before you kiss (256). Classic you — charm first, feelings second 😏</p>
+      </div>
+      <div class="duel-card n-card">
+        <div class="dc-name nn">Noor's Emoji DNA</div>
+        <div class="emoji-row">
+          <div class="emoji-chip">😂 <span>520×</span></div>
+          <div class="emoji-chip">🤣 <span>443×</span></div>
+          <div class="emoji-chip">😘 <span>233×</span></div>
+          <div class="emoji-chip">🤗 <span>80×</span></div>
+          <div class="emoji-chip">😴 <span>69×</span></div>
+          <div class="emoji-chip">🦋 <span>51×</span></div>
+          <div class="emoji-chip">😒 <span>34×</span></div>
+          <div class="emoji-chip">🙄 <span>31×</span></div>
+        </div>
+        <p style="font-size:.78rem;color:var(--text-dd);margin-top:1rem;">🦋 appears 51 times — nobody else has butterflies in their emoji vocabulary. That's her.</p>
+      </div>
+    </div>
+
+    <!-- ANGER STYLE -->
+    <h3 class="fade" style="font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:.5rem;">When things get heated</h3>
+    <p class="fade" style="color:var(--text-d);font-size:.9rem;margin-bottom:1.5rem;">Both of you have very specific tells. Here's the science of your arguments.</p>
+
+    <div class="duel fade">
+      <div class="duel-card y-card">
+        <div class="dc-name yn">Yashraj goes quiet, then —</div>
+        <div class="bar-row"><span class="bar-label">says ugh</span><div class="bar-track"><div class="bar-fill" data-w="100" style="width:0%;background:linear-gradient(90deg,#5eead4,#3dd6c0);"></div></div><span class="bar-count">54</span></div>
+        <div class="bar-row"><span class="bar-label">mentions gussa</span><div class="bar-track"><div class="bar-fill" data-w="59" style="width:0%;background:linear-gradient(90deg,#5eead4,#3dd6c0);"></div></div><span class="bar-count">32</span></div>
+        <div class="bar-row"><span class="bar-label">says chup</span><div class="bar-track"><div class="bar-fill" data-w="33" style="width:0%;background:linear-gradient(90deg,#5eead4,#3dd6c0);"></div></div><span class="bar-count">18</span></div>
+        <div class="bar-row"><span class="bar-label">says bura</span><div class="bar-track"><div class="bar-fill" data-w="39" style="width:0%;background:linear-gradient(90deg,#5eead4,#3dd6c0);"></div></div><span class="bar-count">21</span></div>
+        <div class="bar-row"><span class="bar-label">calls pagal</span><div class="bar-track"><div class="bar-fill" data-w="19" style="width:0%;background:linear-gradient(90deg,#5eead4,#3dd6c0);"></div></div><span class="bar-count">10</span></div>
+        <p style="font-size:.78rem;color:var(--text-dd);margin-top:1rem;">His anger is <em style="color:var(--teal)">verbal frustration</em> — he says "ugh" and lets it out fast. Doesn't hold it long.</p>
+      </div>
+      <div class="duel-card n-card">
+        <div class="dc-name nn">Noor's pattern</div>
+        <div class="bar-row"><span class="bar-label">calls pagal</span><div class="bar-track"><div class="bar-fill" data-w="100" style="width:0%;background:linear-gradient(90deg,#e8557a,#f5a0b8);"></div></div><span class="bar-count">42</span></div>
+        <div class="bar-row"><span class="bar-label">mentions gussa</span><div class="bar-track"><div class="bar-fill" data-w="81" style="width:0%;background:linear-gradient(90deg,#e8557a,#f5a0b8);"></div></div><span class="bar-count">34</span></div>
+        <div class="bar-row"><span class="bar-label">says ugh</span><div class="bar-track"><div class="bar-fill" data-w="98" style="width:0%;background:linear-gradient(90deg,#e8557a,#f5a0b8);"></div></div><span class="bar-count">41</span></div>
+        <div class="bar-row"><span class="bar-label">says chup</span><div class="bar-track"><div class="bar-fill" data-w="98" style="width:0%;background:linear-gradient(90deg,#e8557a,#f5a0b8);"></div></div><span class="bar-count">41</span></div>
+        <div class="bar-row"><span class="bar-label">says bura</span><div class="bar-track"><div class="bar-fill" data-w="83" style="width:0%;background:linear-gradient(90deg,#e8557a,#f5a0b8);"></div></div><span class="bar-count">35</span></div>
+        <p style="font-size:.78rem;color:var(--text-dd);margin-top:1rem;">She calls him <em style="color:var(--rose-l)">"pagal"</em> 42 times — that's her signal. It means she cares enough to argue back.</p>
+      </div>
+    </div>
+
+    <!-- GOOD MORNING/NIGHT -->
+    <div class="chart-wrap fade" style="margin-top:2rem;">
+      <h3>Morning Person vs Night Person</h3>
+      <p>Who sends more "good mornings" vs "good nights"? The answer reveals everything.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1rem;">
+        <div>
+          <p style="font-size:.8rem;color:var(--text-d);margin-bottom:1rem;letter-spacing:1px;text-transform:uppercase;font-size:10px;">Good Mornings sent</p>
+          <div class="bar-row"><span class="bar-label" style="min-width:70px;color:var(--teal)">Yashraj</span><div class="bar-track"><div class="bar-fill" data-w="51" style="width:0%;background:#5eead4;"></div></div><span class="bar-count">73</span></div>
+          <div class="bar-row"><span class="bar-label" style="min-width:70px;color:var(--rose-l)">Noor</span><div class="bar-track"><div class="bar-fill" data-w="100" style="width:0%;background:#e8557a;"></div></div><span class="bar-count">144</span></div>
+          <p style="font-size:.75rem;color:var(--text-dd);margin-top:.5rem;">Noor sends <em style="color:var(--rose-l)">2× more</em> good mornings. She wakes up thinking of you.</p>
+        </div>
+        <div>
+          <p style="font-size:.8rem;color:var(--text-d);margin-bottom:1rem;letter-spacing:1px;text-transform:uppercase;font-size:10px;">Good Nights sent</p>
+          <div class="bar-row"><span class="bar-label" style="min-width:70px;color:var(--teal)">Yashraj</span><div class="bar-track"><div class="bar-fill" data-w="100" style="width:0%;background:#5eead4;"></div></div><span class="bar-count">158</span></div>
+          <div class="bar-row"><span class="bar-label" style="min-width:70px;color:var(--rose-l)">Noor</span><div class="bar-track"><div class="bar-fill" data-w="96" style="width:0%;background:#e8557a;"></div></div><span class="bar-count">152</span></div>
+          <p style="font-size:.75rem;color:var(--text-dd);margin-top:.5rem;">Good nights are a dead heat — you both refuse to be the first to go to sleep.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- ═══════════ DESERT ═══════════ -->
+<section>
+  <div class="sec">
+    <span class="sec-pill">Before It All</span>
+    <h2 class="sec-title fade">The years that were just waiting</h2>
+    <p class="sec-sub fade">Every year before August 2025. The universe was just building anticipation.</p>
+    <div class="desert-grid fade">
+      <div class="desert-box" style="border-color:rgba(255,255,255,.1);"><span class="desert-year">2020</span><span class="desert-num" style="color:var(--text-d);">581</span></div>
+      <div class="desert-box" style="border-color:rgba(255,255,255,.1);"><span class="desert-year">2021</span><span class="desert-num" style="color:var(--text-d);">753</span></div>
+      <div class="desert-box" style="border-color:rgba(255,255,255,.08);"><span class="desert-year">2022</span><span class="desert-num" style="color:var(--text-dd);">163</span></div>
+      <div class="desert-box" style="border-color:rgba(255,255,255,.06);"><span class="desert-year">2023</span><span class="desert-num" style="color:var(--text-dd);">359</span></div>
+      <div class="desert-box" style="border-color:rgba(255,255,255,.04);"><span class="desert-year">2024</span><span class="desert-num" style="color:var(--text-dd);">22</span></div>
+      <div class="desert-box" style="border-color:rgba(232,85,122,.4);background:var(--rose-dim);"><span class="desert-year" style="color:var(--rose-l);">2025→</span><span class="desert-num" style="color:var(--rose-l);">22,342</span></div>
+    </div>
+    <p class="fade" style="font-size:.9rem;color:var(--text-d);font-style:italic;">The jump from 22 to 22,342 in a single year. One confession. One everything.</p>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- ═══════════ ENDING ═══════════ -->
+<section id="ending">
+  <div id="ending">
+    <div class="ending-inner fade">
+      <div class="ending-hearts">❤ ♡ ❤</div>
+      <h2>Happy 6 Months,<br><em>Noor Jahan.</em></h2>
+      <p>You've talked every single day. You've built an entire language together — made of <em style="color:var(--teal)">yrr</em> and <em style="color:var(--rose-l)">hmmm</em> and midnight calls and 6,001 messages in one October. Made of her butterflies 🦋 and his smirks 😏.</p>
+      <p>In 2024, you exchanged 22 messages. This year, you'll probably hit 40,000. Sometimes the universe just needs you to be ready first.</p>
+      <p style="color:var(--text-d)">6,645 km between Shimla and Toulouse. Zero days without each other. Six months of proof.</p>
+      <p style="margin-top:1.5rem;color:var(--gold);font-family:'Playfair Display',serif;font-size:1.1rem;font-style:italic;">You were always the one, Noor. He just had to say it out loud.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+// STARFIELD
+const canvas = document.getElementById('starfield');
+const ctx = canvas.getContext('2d');
+let stars = [];
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+function initStars(){stars=[];for(let i=0;i<200;i++)stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.5+.3,alpha:Math.random(),speed:Math.random()*.003+.001});}
+function drawStars(){ctx.clearRect(0,0,canvas.width,canvas.height);stars.forEach(s=>{s.alpha+=s.speed;if(s.alpha>1){s.alpha=1;s.speed=-s.speed;}if(s.alpha<0){s.alpha=0;s.speed=-s.speed;}ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${s.alpha})`;ctx.fill();});requestAnimationFrame(drawStars);}
+resize();initStars();drawStars();window.addEventListener('resize',()=>{resize();initStars();});
+
+// INTERSECTION OBSERVER
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');}});
+},{threshold:.15});
+document.querySelectorAll('.fade,.tl').forEach(el=>observer.observe(el));
+
+// LOVE METERS
+function animateMeters(){
+  const pairs=[
+    ['lm-love-y','lm-love-n',37,12],
+    ['lm-sorry-y','lm-sorry-n',19,28],
+    ['lm-first-y','lm-first-n',101,179]
+  ];
+  pairs.forEach(([yid,nid,yv,nv])=>{
+    const total=yv+nv;
+    document.getElementById(yid).style.width=((yv/total)*50)+'%';
+    document.getElementById(nid).style.width=((nv/total)*50)+'%';
+  });
+}
+setTimeout(animateMeters,1000);
+
+// BAR ANIMATIONS
+const barObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.bar-fill[data-w]').forEach(b=>{
+        setTimeout(()=>{b.style.width=b.dataset.w+'%';},200);
+      });
+    }
+  });
+},{threshold:.2});
+document.querySelectorAll('.duel-card,.chart-wrap').forEach(el=>barObs.observe(el));
+
+// DAYS COUNTER
+const start=new Date('2025-11-08');
+const today=new Date();
+const days=Math.floor((today-start)/(1000*60*60*24));
+document.getElementById('cnt-days').textContent=days;
+
+// MONTHLY CHART
+const monthlyLabels=['2020','2021','2022','2023','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26','Apr 26'];
+const monthlyData=[581,753,163,359,3355,5127,6001,3847,4008,2826,2499,2619,1524];
+const monthColors=monthlyData.map((v,i)=>{
+  if(i<5)return'rgba(240,238,248,0.15)';
+  if(v===6001)return'#f0c060';
+  return'#e8557a';
+});
+new Chart(document.getElementById('monthChart'),{
+  type:'bar',
+  data:{
+    labels:monthlyLabels,
+    datasets:[{
+      label:'Messages',data:monthlyData,
+      backgroundColor:monthColors,
+      borderColor:monthColors,
+      borderRadius:6,
+      borderWidth:0
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.parsed.y.toLocaleString()} messages`}}},
+    scales:{
+      x:{ticks:{color:'rgba(240,238,248,0.45)',font:{size:11}},grid:{display:false},border:{display:false}},
+      y:{ticks:{color:'rgba(240,238,248,0.35)',font:{size:11},callback:v=>v>=1000?(v/1000).toFixed(0)+'k':v},grid:{color:'rgba(240,238,248,0.05)'},border:{display:false}}
+    }
+  }
+});
+
+// HOURLY CHART
+const hours=['12a','1','2','3','4','5','6','7','8','9','10','11','12p','1','2','3','4','5','6','7','8','9','10','11'];
+const hY=[1260,1231,297,68,46,76,67,194,264,355,361,406,505,648,572,683,927,1058,1029,1587,1403,999,1027,671];
+const hN=[1464,1247,324,84,71,94,131,277,232,343,405,436,465,651,645,720,976,1148,1066,1648,1363,1064,794,602];
+new Chart(document.getElementById('hourChart'),{
+  type:'line',
+  data:{
+    labels:hours,
+    datasets:[
+      {label:'Yashraj',data:hY,borderColor:'#5eead4',backgroundColor:'rgba(94,234,212,0.08)',fill:true,tension:.4,pointRadius:0,borderWidth:2},
+      {label:'Noor',data:hN,borderColor:'#e8557a',backgroundColor:'rgba(232,85,122,0.08)',fill:true,tension:.4,pointRadius:0,borderWidth:2}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      x:{ticks:{color:'rgba(240,238,248,0.45)',font:{size:10},maxRotation:0},grid:{display:false},border:{display:false}},
+      y:{ticks:{color:'rgba(240,238,248,0.35)',font:{size:11},callback:v=>v>=1000?(v/1000).toFixed(1)+'k':v},grid:{color:'rgba(240,238,248,0.05)'},border:{display:false}}
+    }
+  }
+});
+
+// AFFECTION RADAR
+const affLabels=['Good Nights','Miss You','Good Mornings','Says Love','Sends Kisses','Gives Hugs','Calls Jaan','Calls Cute','Shows Care','Says Aww'];
+const affY=[158,74,73,67,61,51,58,61,33,31];
+const affN=[152,76,144,58,22,37,16,45,47,78];
+new Chart(document.getElementById('affChart'),{
+  type:'radar',
+  data:{
+    labels:affLabels,
+    datasets:[
+      {label:'Yashraj',data:affY,borderColor:'#5eead4',backgroundColor:'rgba(94,234,212,0.1)',pointBackgroundColor:'#5eead4',borderWidth:2,pointRadius:3},
+      {label:'Noor',data:affN,borderColor:'#e8557a',backgroundColor:'rgba(232,85,122,0.1)',pointBackgroundColor:'#e8557a',borderWidth:2,pointRadius:3}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{r:{
+      ticks:{display:false},
+      grid:{color:'rgba(240,238,248,0.08)'},
+      pointLabels:{color:'rgba(240,238,248,0.6)',font:{size:10}},
+      angleLines:{color:'rgba(240,238,248,0.06)'}
+    }}
+  }
+});
+
+// SPICY CHART
+const spicyLabels=['Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26','Apr 26'];
+const lateNight=[574,1738,1042,831,791,869,177,617,428];
+const spicyScore=[150,275,360,222,274,134,125,135,89];
+new Chart(document.getElementById('spicyChart'),{
+  type:'bar',
+  data:{
+    labels:spicyLabels,
+    datasets:[
+      {label:'Late Night',data:lateNight,backgroundColor:'rgba(240,192,96,0.7)',borderRadius:4,borderWidth:0},
+      {label:'Spicy',data:spicyScore,backgroundColor:'rgba(232,85,122,0.75)',borderRadius:4,borderWidth:0}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      x:{stacked:false,ticks:{color:'rgba(240,238,248,0.45)',font:{size:11}},grid:{display:false},border:{display:false}},
+      y:{ticks:{color:'rgba(240,238,248,0.35)',font:{size:11},callback:v=>v>=1000?(v/1000).toFixed(1)+'k':v},grid:{color:'rgba(240,238,248,0.05)'},border:{display:false}}
+    }
+  }
+});
+</script>
+</body>
+</html>
